@@ -32,6 +32,7 @@ UIColor *seperatorColor;
 @synthesize delegate;
 @synthesize buttonTitles;
 @synthesize useMotionEffects;
+@synthesize useBlurEffect;
 
 - (id)initWithParentView: (UIView *)_parentView
 {
@@ -50,6 +51,7 @@ UIColor *seperatorColor;
         self.frame = CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
         
         useMotionEffects = false;
+        useBlurEffect = true;
         
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         
@@ -218,7 +220,14 @@ UIColor *seperatorColor;
     
     // This is the dialog's container; we attach the custom content and the buttons to this one
     
-    UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+    UIBlurEffect *blurEffect = nil;
+    CGFloat shadowOpacity = 1.0;
+    UIColor *containerBackgroundColor = [UIColor colorWithRed:220.0/255.0 green:220.0/255.0 blue:220.0/255.0 alpha:1.0];
+    if (self.useBlurEffect) {
+        blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleLight];
+        shadowOpacity = 0.1f;
+        containerBackgroundColor = [UIColor clearColor];
+    }
     
     UIVisualEffectView *dialogContainer = [[UIVisualEffectView alloc] initWithEffect: blurEffect];
     [dialogContainer setFrame: CGRectMake((screenSize.width - dialogSize.width) / 2, (screenSize.height - dialogSize.height) / 2, dialogSize.width, dialogSize.height)];
@@ -229,10 +238,11 @@ UIColor *seperatorColor;
     
     dialogContainer.contentView.layer.cornerRadius = cornerRadius;
     dialogContainer.contentView.layer.shadowRadius = cornerRadius + 5;
-    dialogContainer.contentView.layer.shadowOpacity = 0.1f;
+    dialogContainer.contentView.layer.shadowOpacity = shadowOpacity;
     dialogContainer.contentView.layer.shadowOffset = CGSizeMake(0 - (cornerRadius+5)/2, 0 - (cornerRadius+5)/2);
     dialogContainer.contentView.layer.shadowColor = [UIColor blackColor].CGColor;
     dialogContainer.contentView.layer.shadowPath = [UIBezierPath bezierPathWithRoundedRect:dialogContainer.bounds cornerRadius:dialogContainer.layer.cornerRadius].CGPath;
+    dialogContainer.contentView.backgroundColor = containerBackgroundColor;
     
     // There is a line above the button
     seperatorColor = [UIColor colorWithRed:198.0/255.0 green:198.0/255.0 blue:198.0/255.0 alpha:1.0f];

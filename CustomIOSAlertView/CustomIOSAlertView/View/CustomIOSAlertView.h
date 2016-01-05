@@ -28,6 +28,7 @@ typedef void (^ButtonStyleHandler)(UIButton *button);
 @property (nonatomic, assign) id<CustomIOSAlertViewDelegate> delegate;
 @property (nonatomic, retain) NSMutableArray *buttonTitles;
 @property (nonatomic, assign) BOOL useMotionEffects;
+@property (nonatomic, assign) BOOL useBlurEffect;
 
 @property (copy) void (^onButtonTouchUpInside)(CustomIOSAlertView *alertView, int buttonIndex) ;
 
